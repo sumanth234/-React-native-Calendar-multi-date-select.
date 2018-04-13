@@ -14,6 +14,6 @@ This particular app will satisfy the following requirements.
     
 ![alt text](./Screenshot.png)
 
-Currently this is working only in debug mode and is having some issues in release mode.I am trying to fix it.
+Currently this is working only in debug mode and is having some issues in release mode.Also, there are some minor issues which am trying to fix it.
 
 In order to run in debug mode,once u run the app on emulator press cmd + m (mac or ubunto) or cmd + d(windows) and click debug remotely.By doing this u can run the app smoothly.
