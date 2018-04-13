@@ -40,11 +40,7 @@ export default class App extends Component{
     })
   }
   onMonthChange(val){
-    
-    if(val.length == 1){
-      console.log(val[0].year - this.state.currentYear,"year")
-      
-      console.log(val[0].month - (this.state.currentMonth + 1),"month")
+    if(val.length == 1){      
       this.setState({month:val[0].month,year:val[0].year})
     }
   }
@@ -96,8 +92,6 @@ export default class App extends Component{
     }else{
       min = this.state.startDate
     }
-    console.log("sd",sd)
-    console.log("ed",ed)
     return (
       <View style={styles.container}>
         <View style={{justifyContent:'flex-start',alignContent:'center',borderRadius:12,borderWidth:1.2,width:330,borderColor:'grey',flexDirection:'row'}}>
