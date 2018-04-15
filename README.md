@@ -12,8 +12,8 @@ This particular app will satisfy the following requirements.
 
     Ex. - If a user is trying to book a room between 00:00 am and 4:00 am on 13 Apr, for the same day (from 12 pm, 12 Apr - 11 am, 13 Apr), then the user would be able to book the room for yesterday (12 Apr).
     
-    
+![alt text](./Screenshot.png)
 
-Currently this is working only in debug mode and is having some issues in release mode.I am trying to fix it.
+Currently this is working only in debug mode and is having some issues in release mode.Also, there are some minor issues which am trying to fix it.
 
 In order to run in debug mode,once u run the app on emulator press cmd + m (mac or ubunto) or cmd + d(windows) and click debug remotely.By doing this u can run the app smoothly.
