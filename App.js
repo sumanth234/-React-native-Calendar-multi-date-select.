@@ -43,15 +43,68 @@ export default class App extends Component{
   }
 
   onMonthChange(val){
-    
     if(val.length == 1){
-      this.setState({month:val[0].month,year:val[0].year})
+    console.log(moment().month(),'-',moment(val[0].dateString).month(),'-',moment().year(),'-',moment(val[0].dateString).year())      
+      this.setState({month:moment(val[0].dateString).month(),year:moment(val[0].dateString).year()})
     }
   }
   
   render() {
     var pastScroll,sd,ed,min ;
-    if(this.state.year - this.state.currentYear  == 1){
+    var _markedDates = {
+      [moment(this.state.startDate).format('YYYY-MM-DD')]: {disabled: true}
+    };
+    //const updatedMarkedDates
+    console.log("mmmm",moment(this.state.endDate).format('MM') - moment(this.state.startDate).format('MM'))
+    if((moment(this.state.endDate).format('MM') - moment(this.state.startDate).format('MM')) == 0){
+      for(var i=0;i<=(moment(this.state.endDate).format('DD')- moment(this.state.startDate).format('DD'));i++){
+        if(i == 0 || i == (moment(this.state.endDate).format('DD')- moment(this.state.startDate).format('DD'))){
+          var data = "'" + [moment(this.state.startDate).add(i,'days').format('YYYY-MM-DD')] + "':{disabled: true,marked:true,selected:true, startingDay: true, color: '#e65c00', endingDay: true},"
+       _markedDates = {..._markedDates,[moment(this.state.startDate).add(i,'days').format('YYYY-MM-DD')]: {disabled: true,marked:true,selected:true, startingDay: true, color: '#e65c00', endingDay: true}}
+          
+        }else{
+          var data = "'" + [moment(this.state.startDate).add(i,'days').format('YYYY-MM-DD')] + "':{disabled: true},"
+       _markedDates = {..._markedDates,[moment(this.state.startDate).add(i,'days').format('YYYY-MM-DD')]: {textColor:'#e65c00'}}
+          
+        }
+        console.log("data13431431",data)
+       // _markedDates[moment(this.state.startDate).add(i,'days').format('YYYY-MM-DD')]
+        console.log("data",_markedDates)
+      }
+    }else{
+      for(var i=0;i<= (moment(this.state.endDate).format('MM') - moment(this.state.startDate).format('MM'));i++){
+        console.log("month Change",moment(this.state.endDate).format('MM') - moment(this.state.startDate).format('MM'))
+        console.log("i",i)
+        if(i == 0){
+          for(var j=0;j<=(moment(this.state.startDate).daysInMonth() - moment(this.state.startDate).format('DD'));j++){
+            console.log("i == 0",j)
+            if(j == 0){
+              _markedDates = {..._markedDates,[moment(this.state.startDate).add(j,'days').format('YYYY-MM-DD')]: {disabled: true,marked:true,selected:true, startingDay: true, color: '#e65c00', endingDay: true}}
+            }else{
+              _markedDates = {..._markedDates,[moment(this.state.startDate).add(j,'days').format('YYYY-MM-DD')]:  {textColor:'#e65c00'}}
+            }
+          }
+        }else if(i == (moment(this.state.endDate).format('MM') - moment(this.state.startDate).format('MM'))){
+          console.log("i == end",j)
+          for(var j=0;j<moment(this.state.endDate).format('DD');j++){
+            if(j == (moment(this.state.endDate).format('DD')-1)){
+            _markedDates = {..._markedDates,[moment(this.state.startDate).add(i, 'months').startOf('month').add(j,'days').format('YYYY-MM-DD')]: {disabled: true,marked:true,selected:true, startingDay: true, color: '#e65c00', endingDay: true}}
+            }else{
+            // _markedDates = {..._markedDates,[moment((this.state.currentYear + (this.state.year - this.state.currentYear)) , (moment(this.state.startDate).add(j,'months').month()-1).format('YYYY-MM-DD'))]: {textColor:'#e65c00'}}              
+              _markedDates = {..._markedDates,[moment(this.state.startDate).add(i, 'months').startOf('month').add(j,'days').format('YYYY-MM-DD')]:  {textColor:'#e65c00'}}
+            }
+          }
+        }else{
+          console.log("i in btn",j)
+          for(var j=0;j<moment(this.state.startDate).add(i,'months').daysInMonth();j++){
+            _markedDates = {..._markedDates,[moment(this.state.startDate).add(i, 'months').startOf('month').add(j,'days').format('YYYY-MM-DD')]:  {textColor:'#e65c00'}}            
+          }
+        }
+      }
+    }
+    //console.log("markD",updatedMarkedDates)
+
+    if(this.state.year - this.state.currentYear  === 1){
       pastScroll=(12-(this.state.currentMonth - this.state.month))
     }else{
       pastScroll=(this.state.month - this.state.currentMonth)
@@ -69,7 +122,14 @@ export default class App extends Component{
       <View style={styles.container}>
         <View style={{justifyContent:'flex-start',alignContent:'center',borderRadius:12,borderWidth:1.2,width:330,borderColor:'grey',flexDirection:'row'}}>
         <Image source={require('./calendar.png')} style={{width:30,height:30,alignSelf:'center',marginHorizontal:10}} />
-          <TouchableOpacity onPress={() => this.setState({showModal:true,selectDate:'StartDate'})} style={{width:270}}>
+          <TouchableOpacity onPress={() => {
+            this.setState({showModal:true,selectDate:'StartDate'}) 
+            if(this.state.year - this.state.currentYear  === 1){
+              pastScroll=(12-(this.state.currentMonth - this.state.month))
+            }else{
+              pastScroll=(this.state.month - this.state.currentMonth)
+            }
+            }} style={{width:270}}>
             <TextInput underlineColorAndroid={'transparent'} editable={false} value={this.state.dateDuration} style={{color:'black'}}/>
           </TouchableOpacity>
         </View>
@@ -118,10 +178,12 @@ export default class App extends Component{
               calendarHeight = {400}
               pastScrollRange={pastScroll}
               futureScrollRange={12-pastScroll}
-              markedDates={{
-                [moment(this.state.startDate).format('YYYY-MM-DD')] : {disabled: true,marked:true,selected:true, startingDay: true, color: '#e65c00', endingDay: true},
-                [moment(this.state.endDate).format('YYYY-MM-DD')] : {disabled: true, startingDay: true, color: '#e65c00', endingDay: true},
-              }}
+              markedDates = {_markedDates}
+              //markingType={'custom'}
+              // markedDates={{
+              //   [moment(this.state.startDate).format('YYYY-MM-DD')] : {disabled: true,marked:true,selected:true, startingDay: true, color: '#e65c00', endingDay: true},
+              //   [moment(this.state.endDate).format('YYYY-MM-DD')] : {disabled: true, startingDay: true, color: '#e65c00', endingDay: true},
+              // }}
               markingType={'period'}
             />
             <View style={{width:330,height:40,flexDirection:'row',justifyContent:'flex-end',alignItems:'flex-end',backgroundColor:'white'}}>
